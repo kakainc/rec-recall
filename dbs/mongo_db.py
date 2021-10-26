@@ -12,7 +12,7 @@ NEWPOST_BOOTPOOL = 'newpost_step_boot'
 
 def get_col(host, port, db_name, col_name, replica_set):
     c = pymongo.MongoClient(host, port, replicaSet=replica_set)
-    c.admin.authenticate("root", "b7sameEdxrfDiu3a")
+    c.admin.authenticate("root", "")
     db = c.get_database(db_name)
     col = db.get_collection(col_name)
     return col
