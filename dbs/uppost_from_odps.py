@@ -34,7 +34,7 @@ def get_pids():
 
 @retry(Exception, tries=3, delay=1)
 def upload_exposure(pid, reviews, expose, comment_rate):
-    url = 'http://censor-gin.in.icocofun.net/communityhighaudit'
+    url = 'http://xxxx.net/communityhighaudit'
     response = requests.post(url, data=json.dumps(
         {"pid": pid, "ext": {"reviews": reviews, "expose": expose, "comment_rate": comment_rate}}))
     if response.status_code != 200:

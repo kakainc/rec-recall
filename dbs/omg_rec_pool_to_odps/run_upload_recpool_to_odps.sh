@@ -6,11 +6,7 @@ odpscmd="/home/work/omg-odpscmd/bin/odpscmd"
 pythonenv="/usr/bin/python"
 
 
-source ../../utils/errtrap.sh
-trap 'ERRTRAP $LINENO "omg_recpool" "xiaofendui"' ERR
-
-
-recpool_info_table_name="omg_data.omg_recpool_info"
+recpool_info_table_name="recpool_info"
 ${odpscmd} -e "
     create table if not exists ${recpool_info_table_name}
     (pid bigint, mid bigint, tid bigint, ptype bigint, gid bigint, ct bigint, rec bigint, download_num bigint,
