@@ -1,0 +1,11 @@
+video:
+  - { step: 0, expose_to: 200, rule: '' }
+  - { step: 1, expose_to: 500, rule: 't-step_boot_t <= 7800 and vdur >= 5 and (((part1_id == 15 or part1_id == 17) and like + download + share + review + video_play_score >= 4) or (part1_id != 15 and part1_id != 17 and like + download + share + review + video_play_score >= 3)) and ctr > 0.35' }
+  - { step: 2, expose_to: 1000, rule: 't-step_boot_t <= 7800 and t-step_boot_t > 600 and rec >= 500 and rec < 1000 and vdur >= 5 and (((part1_id == 15 or part1_id == 17) and download >= 1) or (part1_id != 15 and part1_id != 17 and download >= 0)) and (download/rec>0.002 or (like+2*review)/rec>=0.015) and (like + download + share + review)/rec >= 0.01 and ctr > 0.35 and ((play_rate>=0.4 and avg_play_dur > 5) or avg_play_dur >= 18)' }
+#  - { step: 3, expose_to: 1200, rule: 't-ct<86400 and t-step_boot_t > 600 and rec >= 1000 and rec < 1200 and is_mover == 1 and mover_support < 2'}
+
+img:
+  - { step: 0, expose_to: 100, rule: '' }
+  - { step: 1, expose_to: 200, rule: 't-step_boot_t <= 7800 and like + download + share + review > 0' }
+  - { step: 2, expose_to: 500, rule: 't-step_boot_t <= 7800 and rec >= 200 and rec < 500 and (download/rec > 0.008 or review > 0)' }
+#  - { step: 3, expose_to: 700, rule: 't-ct<86400 and rec >= 500 and rec < 700 and is_mover == 1 and mover_support < 2'}
