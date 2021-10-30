@@ -3,8 +3,7 @@
 import argparse
 import codecs
 import time
-from utils import const
-from utils import mongo_db
+from dbs import mongo_db
 
 
 MAX_DAYS = 1800
@@ -33,8 +32,6 @@ def gen_recpool_info(fout):
             gid_ct = doc.get('gid_ct', 0)
 
             tid = doc.get('tid', 0)
-            if tid in const.TEST_TIDS:
-                continue
 
             ptype = doc.get('ptype', 0)
             if ptype <= 1:
@@ -122,7 +119,7 @@ def gen_recpool_info(fout):
 
             community_hashtag_post = int(doc.get('community_hashtag_post', 0))
 
-            file_handler.write('\t'.join(map(unicode, [pid, mid, tid, ptype, gid, ct, rec, download, like, score_mix, gid_ct, fans, atts, is_vulgar, is_sexy, choice_status, choice_types, vdur, real_sume, ctr, play_rate, dtr, qscore, age_tgi, mover_level, mover_part_id, review, community_tag_new, community_tag_high, community_pre_tag, share, step_boot, step_boot_t, community_tag_godrev, subarea_status, subarea_types, like_bait, resource_status, subarea_time, detail, source, original, assist_status, official_template_id, community_hashtag_post])) + '\n')
+            file_handler.write('\t'.join(map(str, [pid, mid, tid, ptype, gid, ct, rec, download, like, score_mix, gid_ct, fans, atts, is_vulgar, is_sexy, choice_status, choice_types, vdur, real_sume, ctr, play_rate, dtr, qscore, age_tgi, mover_level, mover_part_id, review, community_tag_new, community_tag_high, community_pre_tag, share, step_boot, step_boot_t, community_tag_godrev, subarea_status, subarea_types, like_bait, resource_status, subarea_time, detail, source, original, assist_status, official_template_id, community_hashtag_post])) + '\n')
     end_ts = int(time.time())
 
 

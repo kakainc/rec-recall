@@ -52,7 +52,7 @@ if [ ${increment} == "0" ]; then
     done
 
     files=""
-    for item in ${file_list[@]}
+    for item in ${file_list[*]}
     do
         files=${files}" "${item}
     done
@@ -102,19 +102,9 @@ echo "gen_i2i, spend time: ${spent}"
 if [ ${action} == "review" ]; then
     ${pythonenv} index_i2i_review.py ${video_output_path} index_${action}_i2i_video_ video ${post_ptype_tid_file_path}
     ${pythonenv} index_i2i_review.py ${imgtext_output_path} index_${action}_i2i_imgtext_ img ${post_ptype_tid_file_path}
-elif [ ${action} == "status_tab_click" ]; then
+else
     ${pythonenv} index_i2i.py ${video_output_path} index_${action}_i2i_video_
     ${pythonenv} index_i2i.py ${imgtext_output_path} index_${action}_i2i_imgtext_
-else
-    # 分男女打索引
-    ${pythonenv} index_i2i_gender_concurrence.py ${video_output_path} index_${action}_source_i2i_video_ video ${post_ptype_tid_file_path}
-    ${pythonenv} index_i2i_gender_concurrence.py ${imgtext_output_path} index_${action}_source_i2i_imgtext_ img ${post_ptype_tid_file_path}
-fi
-
-# 生成index时不过滤帖子
-if [ ${action} == "review" ] || [ ${action} == "download" ] || [ ${action} == "like" ]; then
-    ${pythonenv} index_i2i.py ${video_output_path} index_${action}_v2_i2i_video_ video ${post_ptype_tid_file_path}
-    ${pythonenv} index_i2i.py ${imgtext_output_path} index_${action}_v2_i2i_imgtext_ img ${post_ptype_tid_file_path}
 fi
 
 if [ ${increment} == "0" ]; then

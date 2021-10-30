@@ -1,9 +1,7 @@
-#!/usr/bin/env python
 # -*- coding:utf-8 -*-
-
 import sys
 import math
-
+from numpy import long
 from concurrent.futures import ThreadPoolExecutor, as_completed, wait, ALL_COMPLETED
 
 from dbs import redis_db
@@ -11,6 +9,7 @@ from dbs import mongo_db
 from utils import topic_helper
 
 
+# 分区标准优质帖
 def get_post_standard():
     col_post_standard = mongo_db.get_col_post_standard()
     docs = col_post_standard.find()
@@ -37,7 +36,8 @@ def meet_post_standard(part2_id, ptype, post_standard, download_rate, like_rate)
         download_rate_standard = min(math.floor(standard.get('download_rate', 9.0)), 20.0)
         like_rate_standard = min(math.floor(standard.get('like_rate', 9.0)), 20.0)
 
-    if (download_rate >= download_rate_standard and like_rate >= like_rate_standard) or (download_rate >= 9.0 and like_rate >= 9.0) or (ptype != 5 and download_rate >= 9.0):
+    if (download_rate >= download_rate_standard and like_rate >= like_rate_standard) or (
+            download_rate >= 9.0 and like_rate >= 9.0) or (ptype != 5 and download_rate >= 9.0):
         return True
     else:
         return False
@@ -73,7 +73,7 @@ def get_post_rec_info(pid):
             'download': int(info.get('s0_download', 0)),
             'review': int(info.get('s0_review', 0)),
             'play_video': int(info.get('s0_play_video', 0)),
-            'play_dur': int(info.get('s0_play_dur', 0))/1000,
+            'play_dur': int(info.get('s0_play_dur', 0)) / 1000,
         },
         'gender1': {
             'rec': int(info.get('s1_rec', 0)),
@@ -193,7 +193,8 @@ def update_to_redis(file_path, pid2features, prefix, post_ptype_tid, tid_part2_m
                     like_rate = 1000 * like / (1.0 + rec)
                     avg_play_dur = play_dur * 1.0 / play_video if play_video > 0 else 0
 
-                    if ptype == 'video' and ctr > 0.35 and ((download_rate >= 2.5 and like_rate >= 5) or (like_rate >= 9 and avg_play_dur >= 15) or meet):
+                    if ptype == 'video' and ctr > 0.35 and (
+                            (download_rate >= 2.5 and like_rate >= 5) or (like_rate >= 9 and avg_play_dur >= 15) or meet):
                         g_all_list.append(item)
                     if ptype == 'img' and ctr > 0.25 and ((download_rate >= 2.5 and like_rate >= 5) or meet):
                         g_all_list.append(item)

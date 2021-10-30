@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
-
 import sys
-
 from dbs import redis_db
 
 

@@ -25,7 +25,7 @@ ${pythonenv} clean_data.py --rec_pool=${recpool_data}
 ${odpscmd} -e "tunnel upload ${recpool_data} ${recpool_info_table_name} -fd '\t'"
 
 
-recpool_table_name="omg_recpool"
+recpool_table_name="recpool"
 ${odpscmd} -e "
 use omg_data;
 drop table if exists $recpool_table_name;

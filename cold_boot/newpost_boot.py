@@ -11,20 +11,11 @@ import logging
 from dbs import redis_db, mongo_db
 from utils import topic_helper
 
-'''
-source: instagram-20、tiktok-30
-10普通
-20消费型
-30Status
-'''
-
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-
 logger = logging.getLogger()
 
 KEY = "index_newposts_boot"
 WEIGHT_KEY = "index_newposts_boot_gender_weight"
-FORCE_BOOT_KEY = "index_new_post_boot_force"
 
 
 def get_step_rules_conf(rule_path):
@@ -121,17 +112,6 @@ def step_cond(step_rules_conf, step, post_base_info, post_rt_info):
     engine = step_rules_conf[rule_type][step].get('rule_engine', '')
 
     match = engine.matches(post_rule_info) if engine else True
-
-    # # ab实验游戏分区ctr限制
-    # exp_gaming_ctr_quantile_5 = get_gaming_ctr_quantile_5()
-    # logger.info("exp_gaming_ctr_quantile_5:{0}".format(exp_gaming_ctr_quantile_5))
-    # if exp_gaming_ctr_quantile_5 < 0.3:
-    #     exp_gaming_ctr_quantile_5 = 0.4
-    # if part1_id == 17 and ctr <= exp_gaming_ctr_quantile_5 and step == 2:
-    #     match = False
-
-    # if step == 2:
-    #     print('pid:{0}, ptype:{1}, step:{2}, match:{3}, post_rule_info:{4}'.format(post_base_info['pid'], ptype, step, match, post_rule_info))
 
     return match
 
@@ -259,9 +239,6 @@ def load_posts_from_recpool(step_rules_conf, col_recpool, offline_redis, col_new
                 step_boot_t = step_boot_info.get('step_boot_t', 0)
                 mover_support = step_boot_info.get('mover_support', 0)
 
-        if not gid:
-            continue
-
         # 资源型帖子过滤
         if int(part2_id) == 80:
             continue
@@ -277,8 +254,8 @@ def load_posts_from_recpool(step_rules_conf, col_recpool, offline_redis, col_new
         if subarea_status > 0 and len(subarea_types) > 0 and int(step_boot % 10) == 0:
             continue
 
-        # if (source == 'instagram-30' or source == 'tiktok-30') and subarea_status > 0 and len(subarea_types) > 0:
-        #     continue
+        if not gid:
+            continue
 
         # 高曝光同gid帖子不再分发
         similar_posts_expose = []
@@ -388,12 +365,9 @@ if __name__ == "__main__":
 
     rule_path = './step_rule.yaml'
     step_rules_conf = get_step_rules_conf(rule_path)
-    if not step_rules_conf:
-        logger.error('step_rules_conf is empty')
-        exit(1)
-
     tid_part_map = topic_helper.get_tid_part_dict()
 
+    # 查看redis中给予帖子的曝光是否使用完
     finish1, unfinish1 = load_posts_from_redis(index_redis)
     unfinish2, all_pids, gender_weight, pid_2_tid, pid_2_ptype, mover_support_pids = load_posts_from_recpool(step_rules_conf, col_recpool, offline_redis, col_newpost_step_boot, tid_part_map)
 

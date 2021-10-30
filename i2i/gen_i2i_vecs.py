@@ -4,7 +4,8 @@ import time
 import gensim
 
 from gensim.similarities.annoy import AnnoyIndexer
-from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED, ALL_COMPLETED
+from concurrent.futures import ThreadPoolExecutor, as_completed, wait, ALL_COMPLETED
+from numpy import long
 
 from dbs import mongo_db
 
